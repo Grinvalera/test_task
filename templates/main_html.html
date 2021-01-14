@@ -1,0 +1,48 @@
+{% load i18n %}
+{% load static %}
+{% load static i18n%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Stars{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'main.css' %}">
+</head>
+<body>
+<nav>
+<ul class="topmenu">
+  <li><a href="{% url 'main' %}">{% trans 'Главная' %}</a></li>
+    <li><a href="" class="active">{% trans 'Авто' %}<span class="fa fa-angle-down"></span></a>
+      <ul class="submenu">
+        <li><a href="{% url 'mazda' %}">Mazda</a></li>
+        <li><a href="{% url 'bmw' %}">BMW</a></li>
+        <li><a href="{% url 'audi' %}">Audi</a></li>
+      </ul>
+    </li>
+    <li><a href="">{% trans 'Новости' %}</a></li>
+    <li><a href="">{% trans 'Контакты' %}</a></li>
+        <form style="text-align: right" action="{% url 'set_language' %}" method="post">{% csrf_token %}
+        <input name="next" type="hidden" value="{{ redirect_to }}">
+        <select name="language">
+        {% get_current_language as LANGUAGE_CODE %}
+        {% get_available_languages as LANGUAGES %}
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+        <option value="{{ language.code }}"
+                {% if language.code == LANGUAGE_CODE %}
+                selected
+                {% endif %}>
+                <li>{{ language.name_local }} ({{ language.code }})</li>
+        </option>
+        {% endfor %}
+        </select>
+        <input type="submit" value="{% trans 'Перевести' %}">
+        </form>
+    </li>
+</ul>
+
+</nav>
+{% block content %}
+{% endblock %}
+</body>
+</html>
